@@ -6,6 +6,7 @@ const Inventory: React.FC = () => {
   const [form, setForm] = useState({
     name: '',
     category: '',
+    supplier: '',
     sku: '',
     price: '',
     cost: '',
@@ -33,6 +34,7 @@ const Inventory: React.FC = () => {
     setForm({
       name: '',
       category: '',
+      supplier: '',
       sku: random,
       price: '',
       cost: '',
@@ -66,14 +68,14 @@ const Inventory: React.FC = () => {
   }
 
   const [products, setProducts] = useState([
-    { id: 1, name: 'Laptop Pro', sku: 'LAP001', category: 'Electronics', stock: 15, price: 1299.99, cost: 900, threshold: 5, images: [] as File[] },
-    { id: 2, name: 'Wireless Mouse', sku: 'MOU002', category: 'Accessories', stock: 3, price: 29.99, cost: 15, threshold: 2, images: [] as File[] },
-    { id: 3, name: 'Gaming Keyboard', sku: 'KEY003', category: 'Electronics', stock: 0, price: 89.99, cost: 50, threshold: 1, images: [] as File[] },
-    { id: 4, name: 'USB Cable', sku: 'CAB004', category: 'Accessories', stock: 45, price: 12.99, cost: 5, threshold: 10, images: [] as File[] },
-    { id: 5, name: 'Monitor 24"', sku: 'MON005', category: 'Electronics', stock: 8, price: 299.99, cost: 200, threshold: 2, images: [] as File[] },
-    { id: 6, name: 'Webcam HD', sku: 'CAM006', category: 'Electronics', stock: 2, price: 59.99, cost: 30, threshold: 1, images: [] as File[] },
-    { id: 7, name: 'Headphones', sku: 'AUD007', category: 'Audio', stock: 12, price: 79.99, cost: 40, threshold: 3, images: [] as File[] },
-    { id: 8, name: 'Tablet 10"', sku: 'TAB008', category: 'Electronics', stock: 0, price: 399.99, cost: 250, threshold: 1, images: [] as File[] }
+    { id: 1, name: 'Laptop Pro', sku: 'LAP001', category: 'Electronics', supplier: 'Alfa Trading', stock: 15, price: 1299.99, cost: 900, threshold: 5, images: [] as File[] },
+    { id: 2, name: 'Wireless Mouse', sku: 'MOU002', category: 'Accessories', supplier: 'Global Supplies', stock: 3, price: 29.99, cost: 15, threshold: 2, images: [] as File[] },
+    { id: 3, name: 'Gaming Keyboard', sku: 'KEY003', category: 'Electronics', supplier: 'El-Nour Import', stock: 0, price: 89.99, cost: 50, threshold: 1, images: [] as File[] },
+    { id: 4, name: 'USB Cable', sku: 'CAB004', category: 'Accessories', supplier: '', stock: 45, price: 12.99, cost: 5, threshold: 10, images: [] as File[] },
+    { id: 5, name: 'Monitor 24"', sku: 'MON005', category: 'Electronics', supplier: '', stock: 8, price: 299.99, cost: 200, threshold: 2, images: [] as File[] },
+    { id: 6, name: 'Webcam HD', sku: 'CAM006', category: 'Electronics', supplier: '', stock: 2, price: 59.99, cost: 30, threshold: 1, images: [] as File[] },
+    { id: 7, name: 'Headphones', sku: 'AUD007', category: 'Audio', supplier: '', stock: 12, price: 79.99, cost: 40, threshold: 3, images: [] as File[] },
+    { id: 8, name: 'Tablet 10"', sku: 'TAB008', category: 'Electronics', supplier: '', stock: 0, price: 399.99, cost: 250, threshold: 1, images: [] as File[] }
   ])
   const [showEditModal, setShowEditModal] = useState(false)
   const [editIndex, setEditIndex] = useState<number | null>(null)
@@ -128,6 +130,8 @@ const Inventory: React.FC = () => {
     setDeleteIndex(null)
   }
 
+  const supplierOptions = ['Alfa Trading', 'Global Supplies', 'El-Nour Import']
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -181,9 +185,20 @@ const Inventory: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-text-primary mb-1">Barcode</label>
-                  <input type="text" name="sku" value={form.sku} readOnly className="w-full border border-border-light rounded-md px-4 py-2 bg-gray-100 dark:bg-gray-800 text-text-muted cursor-not-allowed placeholder-text-muted focus:outline-none" required />
+                <div className="grid grid-cols-2 gap-4 col-span-2">
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1">Supplier</label>
+                    <select name="supplier" value={form.supplier || ''} onChange={handleChange} className="w-full border border-border-light rounded-md px-4 py-2 bg-card-bg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                      <option value="">Select supplier</option>
+                      {supplierOptions.map(sup => (
+                        <option key={sup} value={sup}>{sup}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1">Barcode</label>
+                    <input type="text" name="sku" value={form.sku} readOnly className="w-full border border-border-light rounded-md px-4 py-2 bg-gray-100 dark:bg-gray-800 text-text-muted cursor-not-allowed placeholder-text-muted focus:outline-none" required />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-text-primary mb-1">Cost Price</label>
@@ -281,9 +296,20 @@ const Inventory: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-text-primary mb-1">Barcode</label>
-                  <input type="text" name="sku" value={form.sku} readOnly className="w-full border border-border-light rounded-md px-4 py-2 bg-gray-100 dark:bg-gray-800 text-text-muted cursor-not-allowed placeholder-text-muted focus:outline-none" required />
+                <div className="grid grid-cols-2 gap-4 col-span-2">
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1">Supplier</label>
+                    <select name="supplier" value={form.supplier || ''} onChange={handleChange} className="w-full border border-border-light rounded-md px-4 py-2 bg-card-bg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                      <option value="">Select supplier</option>
+                      {supplierOptions.map(sup => (
+                        <option key={sup} value={sup}>{sup}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1">Barcode</label>
+                    <input type="text" name="sku" value={form.sku} readOnly className="w-full border border-border-light rounded-md px-4 py-2 bg-gray-100 dark:bg-gray-800 text-text-muted cursor-not-allowed placeholder-text-muted focus:outline-none" required />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-text-primary mb-1">Cost Price</label>
@@ -354,6 +380,7 @@ const Inventory: React.FC = () => {
                 <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Product</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">SKU</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Category</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Supplier</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Stock</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Price</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Status</th>
@@ -380,6 +407,7 @@ const Inventory: React.FC = () => {
                   </td>
                   <td className="p-4 align-middle text-sm text-text-primary">{item.sku}</td>
                   <td className="p-4 align-middle text-sm text-text-primary">{item.category}</td>
+                  <td className="p-4 align-middle text-sm text-text-primary">{item.supplier || '—'}</td>
                   <td className="p-4 align-middle text-sm text-text-primary">{item.stock}</td>
                   <td className="p-4 align-middle text-sm text-text-primary">${item.price.toFixed(2)}</td>
                   <td className="p-4 align-middle">
