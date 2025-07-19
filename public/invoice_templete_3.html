@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Thermal Invoice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: 12px;
+      font-family: monospace, sans-serif;
+    }
+    body {
+      width: 58mm;
+      padding: 10px;
+    }
+    .center {
+      text-align: center;
+    }
+    .bold {
+      font-weight: bold;
+    }
+    .line {
+      border-top: 1px dashed #000;
+      margin: 5px 0;
+    }
+    .logo {
+      max-width: 100%;
+      max-height: 40px;
+      margin-bottom: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    td {
+      padding: 2px 0;
+    }
+    .total {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="center">
+    <div class="bold">Store Name</div>
+    <div>Branch: the store address</div>
+  </div>
+
+  <div class="line"></div>
+
+  <div>Cashier: John</div>
+  <div>Date: 2025-07-09</div>
+  <div>Receipt #: 555823</div>
+
+  <div class="line"></div>
+
+  <table>
+    <tr>
+      <td>Shirt Black</td>
+      <td style="text-align:right;">$25.00</td>
+    </tr>
+    <tr>
+      <td>Discount</td>
+      <td style="text-align:right;">- $5.00</td>
+    </tr>
+    <tr>
+      <td>Shorts Gray</td>
+      <td style="text-align:right;">$30.00</td>
+    </tr>
+  </table>
+
+  <div class="line"></div>
+
+  <table>
+    <tr><td>Subtotal</td><td style="text-align:right;">$50.00</td></tr>
+    <tr><td>Tax</td><td style="text-align:right;">$5.00</td></tr>
+    <tr class="total"><td>Total</td><td style="text-align:right;">$55.00</td></tr>
+  </table>
+
+  <div class="line"></div>
+
+  <div class="center">
+    come again! store website .com
+  </div>
+   <div class="center"><br>provided by kasheer plus <br><br>
+    <img src="logo for light backgrounds.png" class="logo" alt="web app Logo" /></div>
+
+  <script>
+    function sendHeight() {
+      window.parent.postMessage({ type: 'set-iframe-height', height: document.body.scrollHeight }, '*');
+    }
+    window.addEventListener('load', sendHeight);
+    new ResizeObserver(sendHeight).observe(document.body);
+  </script>
+</body>
+</html>
