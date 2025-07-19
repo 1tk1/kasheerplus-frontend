@@ -73,7 +73,7 @@ const AppLayout: React.FC = () => {
   return (
     <div className={`min-h-screen bg-background ${darkMode ? 'dark' : ''}`}>
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-primary transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-primary sidebar transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between h-20 px-6 border-b border-primary-hover">
@@ -164,7 +164,7 @@ const AppLayout: React.FC = () => {
       {/* Main Content */}
       <div className="relative z-30 lg:ml-64">
         {/* Top Bar */}
-        <div className="sticky top-0 z-50 bg-card-bg border-b border-border-light backdrop-blur-sm">
+        <div className="sticky top-0 z-50 bg-card-bg topbar border-b border-border-light backdrop-blur-sm">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             {/* Left side */}
             <div className="flex items-center space-x-4">
@@ -180,9 +180,9 @@ const AppLayout: React.FC = () => {
               {settings && (
                 <div className="hidden sm:flex items-center space-x-2 px-3 py-2 bg-secondary-bg rounded-lg">
                   <Store className="h-4 w-4 text-accent" />
-                  <span className="text-sm font-medium text-primary">
-                    {settings.name}
-                  </span>
+                                  <span className="text-sm font-medium text-primary">
+                  {settings.name}
+                </span>
                 </div>
               )}
             </div>

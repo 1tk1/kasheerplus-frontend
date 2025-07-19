@@ -199,12 +199,12 @@ const Index: React.FC = () => {
               <a
                 key={action.name}
                 href={action.href}
-                className="flex flex-col items-center p-4 rounded-xl bg-secondary-bg hover:bg-primary hover:text-light transition-all duration-200 group"
+                className="flex flex-col items-center p-4 rounded-xl bg-secondary-bg hover:bg-accent/10 transition-all duration-200 group"
               >
                 <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-kasheer mb-3 group-hover:scale-110 transition-transform">
                   <Icon className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-sm font-medium text-center">{action.name}</span>
+                <span className="text-sm font-medium text-center text-primary group-hover:text-accent">{action.name}</span>
               </a>
             )
           })}
