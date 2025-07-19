@@ -17,6 +17,8 @@ import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 import AdminPanel from './pages/AdminPanel'
 import SuperAdminPanel from './pages/SuperAdminPanel'
+import OperationalReportDetails from './pages/report-details/OperationalReportDetails';
+import FinancialReportDetails from './pages/report-details/FinancialReportDetails';
 
 function App() {
   return (
@@ -27,7 +29,6 @@ function App() {
             {/* Public routes */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/signup" element={<Signup />} />
-            
             {/* Protected routes */}
             <Route path="/" element={
               <ProtectedRoute>
@@ -41,7 +42,9 @@ function App() {
               <Route path="suppliers" element={<Suppliers />} />
               <Route path="invoices" element={<Invoices />} />
               <Route path="finance" element={<Finance />} />
+              <Route path="finance/:slug" element={<FinancialReportDetails />} />
               <Route path="reports" element={<Reports />} />
+              <Route path="reports/:slug" element={<OperationalReportDetails />} />
               <Route path="settings" element={<Settings />} />
               <Route path="admin" element={<AdminPanel />} />
               <Route path="super-admin" element={<SuperAdminPanel />} />
