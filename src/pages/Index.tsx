@@ -142,16 +142,9 @@ const Index: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <img 
-            src="/logo for light backgrounds.png" 
-            alt="KasheerPlus" 
-            className="h-12 w-auto"
-          />
-          <div>
-            <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
-            <p className="text-text-secondary mt-1">Welcome back! Here's what's happening with your store today.</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
+          <p className="text-text-secondary mt-1">Welcome back! Here's what's happening with your store today.</p>
         </div>
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-2 px-4 py-2 bg-secondary-bg rounded-lg">
@@ -187,8 +180,8 @@ const Index: React.FC = () => {
                     <span className="text-xs text-text-muted ml-1">from last month</span>
                   </div>
                 </div>
-                <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center shadow-kasheer`}>
-                  <Icon className="h-6 w-6 text-light" />
+                <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-kasheer">
+                  <Icon className="h-6 w-6 text-white" />
                 </div>
               </div>
             </div>
@@ -208,8 +201,8 @@ const Index: React.FC = () => {
                 href={action.href}
                 className="flex flex-col items-center p-4 rounded-xl bg-secondary-bg hover:bg-primary hover:text-light transition-all duration-200 group"
               >
-                <div className={`w-12 h-12 ${action.color} rounded-xl flex items-center justify-center shadow-kasheer mb-3 group-hover:scale-110 transition-transform`}>
-                  <Icon className="h-6 w-6 text-light" />
+                <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-kasheer mb-3 group-hover:scale-110 transition-transform">
+                  <Icon className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-sm font-medium text-center">{action.name}</span>
               </a>
@@ -232,8 +225,8 @@ const Index: React.FC = () => {
             {recentSales.map((sale) => (
               <div key={sale.id} className="flex items-center justify-between p-4 bg-secondary-bg rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-accent rounded-full flex items-center justify-center">
-                    <ShoppingCart className="h-5 w-5 text-light" />
+                  <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <ShoppingCart className="h-5 w-5 text-white" />
                   </div>
                   <div>
                     <p className="font-medium text-primary">{sale.customer}</p>
@@ -282,8 +275,8 @@ const Index: React.FC = () => {
               <p className="text-sm font-medium text-text-secondary">Total Orders</p>
               <p className="text-2xl font-bold text-primary mt-1">1,234</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-              <ShoppingCart className="h-6 w-6 text-light" />
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+              <ShoppingCart className="h-6 w-6 text-white" />
             </div>
           </div>
         </div>
@@ -294,8 +287,8 @@ const Index: React.FC = () => {
               <p className="text-sm font-medium text-text-secondary">Average Order Value</p>
               <p className="text-2xl font-bold text-primary mt-1">$156.78</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center">
-              <DollarSign className="h-6 w-6 text-light" />
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+              <DollarSign className="h-6 w-6 text-white" />
             </div>
           </div>
         </div>
@@ -306,8 +299,8 @@ const Index: React.FC = () => {
               <p className="text-sm font-medium text-text-secondary">Conversion Rate</p>
               <p className="text-2xl font-bold text-primary mt-1">3.2%</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-              <TrendingUp className="h-6 w-6 text-light" />
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+              <TrendingUp className="h-6 w-6 text-white" />
             </div>
           </div>
         </div>
