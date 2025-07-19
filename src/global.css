@@ -256,6 +256,23 @@
     color: #f87171;
   }
   
+  /* Product Placeholder Images */
+  .product-placeholder {
+    @apply bg-secondary-bg rounded-md flex items-center justify-center;
+  }
+  
+  .product-placeholder:hover {
+    @apply bg-primary-hover transition-colors;
+  }
+  
+  .product-placeholder .icon {
+    color: var(--text-muted);
+  }
+  
+  .dark .product-placeholder .icon {
+    color: var(--text-muted);
+  }
+  
   /* Dark Mode Icon Colors */
   .dark .text-green-500 {
     color: #22c55e;

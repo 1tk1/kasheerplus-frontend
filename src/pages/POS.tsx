@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Search, Plus, Minus, X, ArrowLeft, Calculator, RotateCcw, Keyboard, Maximize2 } from 'lucide-react'
+import { ShoppingCart, Search, Plus, Minus, X, ArrowLeft, Calculator, RotateCcw, Keyboard, Maximize2, Package } from 'lucide-react'
 
 const POS: React.FC = () => {
   return (
@@ -68,7 +68,9 @@ const POS: React.FC = () => {
             {/* Sample Products */}
             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
               <div key={item} className="bg-secondary-bg rounded-lg p-4 cursor-pointer hover:bg-primary-hover transition-colors">
-                <div className="w-full h-24 bg-secondary-bg rounded-md mb-3"></div>
+                <div className="w-full h-24 product-placeholder mb-3">
+                  <Package className="w-12 h-12 icon" />
+                </div>
                 <h3 className="font-medium text-sm text-text-primary">Product {item}</h3>
                 <p className="text-sm text-text-secondary">$19.99</p>
                 <p className="text-xs text-text-muted">In Stock: 25</p>
@@ -88,7 +90,9 @@ const POS: React.FC = () => {
           <div className="space-y-3 mb-6">
             <div className="flex items-center justify-between p-3 bg-secondary-bg rounded-md">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-secondary-bg rounded-md"></div>
+                <div className="w-10 h-10 product-placeholder">
+                  <Package className="w-5 h-5 icon" />
+                </div>
                 <div>
                   <p className="font-medium text-sm text-text-primary">Product 1</p>
                   <p className="text-sm text-text-secondary">$19.99</p>
@@ -110,7 +114,9 @@ const POS: React.FC = () => {
 
             <div className="flex items-center justify-between p-3 bg-secondary-bg rounded-md">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-secondary-bg rounded-md"></div>
+                <div className="w-10 h-10 product-placeholder">
+                  <Package className="w-5 h-5 icon" />
+                </div>
                 <div>
                   <p className="font-medium text-sm text-text-primary">Product 2</p>
                   <p className="text-sm text-text-secondary">$29.99</p>
