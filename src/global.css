@@ -7,7 +7,7 @@
 :root {
   /* Primary Colors */
   --primary: #0D2A45;
-  --primary-hover: #1E3A5F;
+  --primary-hover: #e5e7eb;
   --primary-dark: #0A1C2D;
   
   /* Accent Colors */
@@ -46,7 +46,7 @@
 .dark {
   /* Primary Colors */
   --primary: #0A1C2D;
-  --primary-hover: #0D2A45;
+  --primary-hover: #1E3A5F;
   --primary-dark: #06141F;
   
   /* Accent Colors */
@@ -256,9 +256,27 @@
     color: #f87171;
   }
   
+  /* Light Mode Hover Colors */
+  .hover\:bg-primary-hover:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .dark .hover\:bg-primary-hover:hover {
+    background-color: var(--primary-hover);
+  }
+  
   /* Product Placeholder Images */
   .product-placeholder {
     @apply bg-secondary-bg rounded-md flex items-center justify-center;
+  }
+  
+  /* Sidebar Text Colors */
+  .sidebar h3 {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .dark .sidebar h3 {
+    color: rgba(255, 255, 255, 0.7);
   }
   
   .product-placeholder:hover {

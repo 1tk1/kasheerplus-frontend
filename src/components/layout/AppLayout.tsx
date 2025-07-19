@@ -113,7 +113,7 @@ const AppLayout: React.FC = () => {
             {/* Admin Navigation */}
             {user?.role === 'admin' && (
               <div className="pt-6 border-t border-primary-hover">
-                <h3 className="px-4 text-xs font-semibold text-light/50 uppercase tracking-wider mb-2">
+                <h3 className="px-4 text-xs font-semibold text-white/70 uppercase tracking-wider mb-2">
                   Administration
                 </h3>
                 {adminNavigation.map((item) => {
@@ -137,18 +137,18 @@ const AppLayout: React.FC = () => {
 
           {/* User Profile */}
           <div className="p-4 border-t border-primary-hover">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-light truncate">
-                  {user?.name || 'User'}
-                </p>
-                <p className="text-xs text-light/70 capitalize">
-                  {user?.role || 'user'}
-                </p>
-              </div>
+                          <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <User className="h-5 w-5 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">
+                    {user?.name || 'User'}
+                  </p>
+                  <p className="text-xs text-white/70 capitalize">
+                    {user?.role || 'user'}
+                  </p>
+                </div>
               <button
                 onClick={handleSignOut}
                 className="text-red-400 hover:text-red-300 transition-colors"

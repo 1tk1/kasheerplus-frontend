@@ -1,33 +1,33 @@
 import React from 'react'
-import { Plus, Search, Filter } from 'lucide-react'
+import { Plus, Search, Filter, Package, Edit, Trash2 } from 'lucide-react'
 
 const Inventory: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Inventory</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-text-primary">Inventory</h1>
+          <p className="text-text-secondary">
             Manage your product inventory and stock levels
           </p>
         </div>
-        <button className="flex items-center space-x-2 bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+        <button className="flex items-center space-x-2 bg-accent text-white px-4 py-2 rounded-md hover:bg-accent-hover transition-colors">
           <Plus className="h-4 w-4" />
           <span>Add Product</span>
         </button>
       </div>
 
-      <div className="bg-card border border-border rounded-lg p-6 shadow-sm">
+      <div className="bg-secondary-bg border border-border-color rounded-lg p-6 shadow-sm">
         <div className="flex items-center space-x-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-muted" />
             <input
               type="text"
               placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2 border border-input rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-border-color rounded-md bg-primary-bg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
-          <button className="flex items-center space-x-2 px-4 py-2 border border-input rounded-md hover:bg-muted transition-colors text-foreground">
+          <button className="flex items-center space-x-2 px-4 py-2 border border-border-color rounded-md hover:bg-primary-hover transition-colors text-text-primary">
             <Filter className="h-4 w-4" />
             <span>Filter</span>
           </button>
@@ -36,39 +36,67 @@ const Inventory: React.FC = () => {
         <div className="relative w-full overflow-auto">
           <table className="w-full caption-bottom text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Product</th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">SKU</th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Category</th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Stock</th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Price</th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Actions</th>
+              <tr className="border-b border-border-color">
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Product</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">SKU</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Category</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Stock</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Price</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Status</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-text-secondary">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((item) => (
-                <tr key={item} className="border-b border-border transition-colors hover:bg-muted/50">
+              {[
+                { id: 1, name: 'Laptop Pro', sku: 'LAP001', category: 'Electronics', stock: 15, price: 1299.99, status: 'in-stock' },
+                { id: 2, name: 'Wireless Mouse', sku: 'MOU002', category: 'Accessories', stock: 3, price: 29.99, status: 'low-stock' },
+                { id: 3, name: 'Gaming Keyboard', sku: 'KEY003', category: 'Electronics', stock: 0, price: 89.99, status: 'out-of-stock' },
+                { id: 4, name: 'USB Cable', sku: 'CAB004', category: 'Accessories', stock: 45, price: 12.99, status: 'in-stock' },
+                { id: 5, name: 'Monitor 24"', sku: 'MON005', category: 'Electronics', stock: 8, price: 299.99, status: 'in-stock' },
+                { id: 6, name: 'Webcam HD', sku: 'CAM006', category: 'Electronics', stock: 2, price: 59.99, status: 'low-stock' },
+                { id: 7, name: 'Headphones', sku: 'AUD007', category: 'Audio', stock: 12, price: 79.99, status: 'in-stock' },
+                { id: 8, name: 'Tablet 10"', sku: 'TAB008', category: 'Electronics', stock: 0, price: 399.99, status: 'out-of-stock' }
+              ].map((item) => (
+                <tr key={item.id} className="border-b border-border-color transition-colors hover:bg-primary-hover">
                   <td className="p-4 align-middle">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-muted rounded-md"></div>
+                      <div className="w-10 h-10 product-placeholder">
+                        <Package className="w-5 h-5 icon" />
+                      </div>
                       <div>
-                        <p className="font-medium text-foreground">Product {item}</p>
-                        <p className="text-sm text-muted-foreground">Description</p>
+                        <p className="font-medium text-text-primary">{item.name}</p>
+                        <p className="text-sm text-text-secondary">Product Description</p>
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 align-middle text-sm text-foreground">SKU{item.toString().padStart(3, '0')}</td>
-                  <td className="p-4 align-middle text-sm text-foreground">Category {item}</td>
-                  <td className="p-4 align-middle text-sm text-foreground">{25 - item * 3}</td>
-                  <td className="p-4 align-middle text-sm text-foreground">${(19.99 + item).toFixed(2)}</td>
+                  <td className="p-4 align-middle text-sm text-text-primary">{item.sku}</td>
+                  <td className="p-4 align-middle text-sm text-text-primary">{item.category}</td>
+                  <td className="p-4 align-middle text-sm text-text-primary">{item.stock}</td>
+                  <td className="p-4 align-middle text-sm text-text-primary">${item.price.toFixed(2)}</td>
                   <td className="p-4 align-middle">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      In Stock
-                    </span>
+                    {item.status === 'in-stock' ? (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        In Stock
+                      </span>
+                    ) : item.status === 'low-stock' ? (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                        Low Stock
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                        Out of Stock
+                      </span>
+                    )}
                   </td>
                   <td className="p-4 align-middle">
-                    <button className="text-sm text-primary hover:text-primary/80">Edit</button>
+                    <div className="flex items-center space-x-2">
+                      <button className="text-sm text-accent hover:text-accent-hover transition-colors">
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button className="text-sm text-red-500 hover:text-red-600 transition-colors">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
