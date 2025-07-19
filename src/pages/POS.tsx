@@ -1,8 +1,44 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ShoppingCart, Search, Plus, Minus, X, ArrowLeft, Calculator, RotateCcw, Keyboard, Maximize2, Package } from 'lucide-react'
+import { useState } from 'react'
 
 const POS: React.FC = () => {
+  // Sample products
+  const products = [
+    { id: 1, name: 'Product 1', price: 19.99 },
+    { id: 2, name: 'Product 2', price: 29.99 },
+    { id: 3, name: 'Product 3', price: 39.99 },
+    { id: 4, name: 'Product 4', price: 49.99 },
+    { id: 5, name: 'Product 5', price: 59.99 },
+    { id: 6, name: 'Product 6', price: 69.99 },
+    { id: 7, name: 'Product 7', price: 79.99 },
+    { id: 8, name: 'Product 8', price: 89.99 },
+  ]
+  const [cart, setCart] = useState<{id: number, name: string, price: number, qty: number}[]>([])
+
+  const addToCart = (product: {id: number, name: string, price: number}) => {
+    setCart(prev => {
+      const idx = prev.findIndex(p => p.id === product.id)
+      if (idx !== -1) {
+        const updated = [...prev]
+        updated[idx].qty += 1
+        return updated
+      } else {
+        return [...prev, { ...product, qty: 1 }]
+      }
+    })
+  }
+  const increaseQty = (id: number) => {
+    setCart(prev => prev.map(p => p.id === id ? { ...p, qty: p.qty + 1 } : p))
+  }
+  const decreaseQty = (id: number) => {
+    setCart(prev => prev.flatMap(p => p.id === id ? (p.qty > 1 ? [{ ...p, qty: p.qty - 1 }] : []) : [p]))
+  }
+  const removeFromCart = (id: number) => {
+    setCart(prev => prev.filter(p => p.id !== id))
+  }
+
   return (
     <div className="h-full w-full">
       {/* Header with shortcuts */}
@@ -66,13 +102,13 @@ const POS: React.FC = () => {
           {/* Product Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {/* Sample Products */}
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-              <div key={item} className="bg-secondary-bg rounded-lg p-4 cursor-pointer hover:bg-primary-hover transition-colors">
+            {products.map((product) => (
+              <div key={product.id} className="bg-secondary-bg rounded-lg p-4 cursor-pointer hover:bg-primary-hover transition-colors" onClick={() => addToCart(product)}>
                 <div className="w-full h-24 product-placeholder mb-3">
                   <Package className="w-12 h-12 icon" />
                 </div>
-                <h3 className="font-medium text-sm text-text-primary">Product {item}</h3>
-                <p className="text-sm text-text-secondary">$19.99</p>
+                <h3 className="font-medium text-sm text-text-primary">{product.name}</h3>
+                <p className="text-sm text-text-secondary">${product.price.toFixed(2)}</p>
                 <p className="text-xs text-text-muted">In Stock: 25</p>
               </div>
             ))}
@@ -88,68 +124,49 @@ const POS: React.FC = () => {
 
           {/* Cart Items */}
           <div className="space-y-3 mb-6">
-            <div className="flex items-center justify-between p-3 bg-secondary-bg rounded-md">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 product-placeholder">
-                  <Package className="w-5 h-5 icon" />
+            {cart.length === 0 && (
+              <div className="text-center text-text-muted py-8">Cart is empty</div>
+            )}
+            {cart.map(item => (
+              <div key={item.id} className="flex items-center justify-between p-3 bg-secondary-bg rounded-md">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 product-placeholder">
+                    <Package className="w-5 h-5 icon" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-text-primary">{item.name}</p>
+                    <p className="text-sm text-text-secondary">${item.price.toFixed(2)}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-sm text-text-primary">Product 1</p>
-                  <p className="text-sm text-text-secondary">$19.99</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button className="p-1 rounded hover:bg-primary-hover text-text-primary">
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="text-sm font-medium text-text-primary">2</span>
-                <button className="p-1 rounded hover:bg-primary-hover text-text-primary">
-                  <Plus className="h-4 w-4" />
-                </button>
-                <button className="p-1 rounded hover:bg-primary-hover text-red-500">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-secondary-bg rounded-md">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 product-placeholder">
-                  <Package className="w-5 h-5 icon" />
-                </div>
-                <div>
-                  <p className="font-medium text-sm text-text-primary">Product 2</p>
-                  <p className="text-sm text-text-secondary">$29.99</p>
+                <div className="flex items-center space-x-2">
+                  <button className="p-1 rounded bg-gray-100 dark:bg-gray-800 text-text-muted hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onClick={() => decreaseQty(item.id)}>
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="text-sm font-medium text-text-primary">{item.qty}</span>
+                  <button className="p-1 rounded bg-gray-100 dark:bg-gray-800 text-text-muted hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onClick={() => increaseQty(item.id)}>
+                    <Plus className="h-4 w-4" />
+                  </button>
+                  <button className="p-1 rounded bg-gray-100 dark:bg-gray-800 text-red-500 hover:bg-red-100 dark:hover:bg-red-900 transition-colors" onClick={() => removeFromCart(item.id)}>
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <button className="p-1 rounded hover:bg-primary-hover text-text-primary">
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="text-sm font-medium text-text-primary">1</span>
-                <button className="p-1 rounded hover:bg-primary-hover text-text-primary">
-                  <Plus className="h-4 w-4" />
-                </button>
-                <button className="p-1 rounded hover:bg-primary-hover text-red-500">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Cart Summary */}
           <div className="space-y-3 border-t border-border-light pt-4">
             <div className="flex justify-between">
               <span className="text-text-secondary">Subtotal</span>
-              <span className="font-medium text-text-primary">$69.97</span>
+              <span className="font-medium text-text-primary">${cart.reduce((sum, p) => sum + p.price * p.qty, 0).toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-text-secondary">Tax (10%)</span>
-              <span className="font-medium text-text-primary">$7.00</span>
+              <span className="font-medium text-text-primary">${(cart.reduce((sum, p) => sum + p.price * p.qty, 0) * 0.1).toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-lg font-bold text-text-primary">
               <span>Total</span>
-              <span>$76.97</span>
+              <span>${(cart.reduce((sum, p) => sum + p.price * p.qty, 0) * 1.1).toFixed(2)}</span>
             </div>
           </div>
 
