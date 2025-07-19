@@ -42,26 +42,6 @@ const PrivacySettingsTab: React.FC = () => {
     setConfirmPassword('');
   };
 
-  const handleSaveInfo = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInfoSuccess(false);
-    setInfoError('');
-    if (!editName) {
-      setInfoError('Name is required.');
-      return;
-    }
-    if (!editEmail) {
-      setInfoError('Email is required.');
-      return;
-    }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(editEmail)) {
-      setInfoError('Invalid email format.');
-      return;
-    }
-    setUser(u => ({ ...u, name: editName, email: editEmail }));
-    setInfoSuccess(true);
-  };
-
   const handleReset = () => {
     setResetConfirm(true);
     setResetFinal(false);

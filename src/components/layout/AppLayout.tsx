@@ -17,7 +17,6 @@ import {
   LogOut, 
   Menu, 
   X, 
-  Search, 
   Bell, 
   Sun, 
   Moon,

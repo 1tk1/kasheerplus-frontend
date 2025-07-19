@@ -1,60 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Upload, Trash2, Zap } from 'lucide-react';
-
-const defaultShortcuts = [
-  { key: 'Alt+1', action: 'Open New Sale', button: 'Open Sale', disabled: false },
-  { key: 'Alt+2', action: 'Open Returns', button: 'Open Returns', disabled: false },
-  { key: 'Alt+3', action: 'Print Last Receipt', button: 'Print Last Receipt', disabled: false },
-  { key: 'Alt+4', action: 'Close Cashier', button: 'Close Cashier', disabled: false },
-  { key: 'Alt+5', action: 'Quick Add Item', button: 'Quick Add Item', disabled: false },
-  { key: 'Alt+6', action: 'Cancel Sale', button: 'Cancel Sale', disabled: false },
-  { key: 'Alt+7', action: 'Cash Payment', button: 'Cash Payment', disabled: false },
-  { key: 'Alt+8', action: 'Card Payment', button: 'Card Payment', disabled: false },
-  { key: 'Alt+9', action: 'Open Settings', button: 'Open Settings', disabled: false },
-];
-
-const ShortcutsPopup: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
-  if (!open) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white dark:bg-secondary-bg rounded-2xl shadow-2xl w-full max-w-2xl p-8 relative">
-        <button className="absolute top-4 right-4 text-gray-400 hover:text-red-500" onClick={onClose}>&times;</button>
-        <h2 className="text-xl font-bold mb-6 text-text-primary flex items-center gap-2"><Zap className="w-5 h-5 text-accent" /> POS Shortcuts</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm rounded-xl overflow-hidden">
-            <thead>
-              <tr className="bg-muted text-xs uppercase">
-                <th className="p-3 text-left w-20">Key</th>
-                <th className="p-3 text-left">Action</th>
-                <th className="p-3 text-center w-40">Quick</th>
-              </tr>
-            </thead>
-            <tbody>
-              {defaultShortcuts.map((s, idx) => (
-                <tr key={idx} className={"border-b border-border " + (idx % 2 === 0 ? 'bg-background' : 'bg-muted/40') + " hover:bg-accent/10 transition"}>
-                  <td className="p-3 font-mono font-semibold text-accent text-base">{s.key}</td>
-                  <td className="p-3 text-base">{s.action}</td>
-                  <td className="p-3 text-center">
-                    {s.button && (
-                      <button className="inline-flex items-center gap-1 border px-3 py-1 rounded-full text-xs font-semibold bg-muted text-accent border-accent/30 hover:bg-accent/10 transition" type="button" title={s.key} disabled>
-                        <Zap className="w-4 h-4" /> {s.button}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { Upload, Trash2 } from 'lucide-react';
 
 const StoreSettingsTab: React.FC = () => {
   const [logo, setLogo] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

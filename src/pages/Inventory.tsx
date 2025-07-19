@@ -108,9 +108,6 @@ const Inventory: React.FC = () => {
       setShowEditModal(false)
     }
   }
-  const handleDeleteProduct = (idx: number) => {
-    setProducts(products.filter((_, i) => i !== idx))
-  }
 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null)

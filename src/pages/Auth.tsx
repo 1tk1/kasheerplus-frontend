@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLoading } from '@/contexts/LoadingContext'
 import { 
-  Store, 
   Mail, 
   Lock, 
   Eye, 
@@ -18,11 +17,7 @@ import {
   Users,
   Package,
   CreditCard,
-  Globe,
-  ArrowLeft,
-  Building,
-  MapPin,
-  Calendar
+  ArrowLeft
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 

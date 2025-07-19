@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Edit, Trash2, Plus, Zap } from 'lucide-react';
+import { Edit, Zap } from 'lucide-react';
 
 const defaultShortcuts = [
   { key: 'Alt+1', action: 'Open New Sale', button: 'Open Sale', disabled: false },
@@ -19,20 +19,10 @@ const ReturnsPopup: React.FC<{ open: boolean; onClose: () => void }> = ({ open, 
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [barcode, setBarcode] = useState('');
   const [invoiceDate, setInvoiceDate] = useState(''); // yyyy-mm-dd
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [error] = useState('');
+  const [success] = useState(false);
 
   // دالة وهمية: في التطبيق الحقيقي يجب جلب تاريخ الفاتورة من قاعدة البيانات
-  const handleCheck = () => {
-    setError('');
-    setSuccess(false);
-    if (!invoiceNumber || !barcode || !invoiceDate) {
-      setError('Please enter all fields.');
-      return;
-    }
-    setSuccess(true);
-  };
-
   const canReturn = () => {
     if (!invoiceDate) return false;
     const now = new Date();
@@ -76,37 +66,11 @@ const ReturnsPopup: React.FC<{ open: boolean; onClose: () => void }> = ({ open, 
 };
 
 const POSSettingsTab: React.FC = () => {
-  const [shortcuts, setShortcuts] = useState(defaultShortcuts);
-  const [editing, setEditing] = useState<number | null>(null);
-  const [newShortcut, setNewShortcut] = useState({ key: '', action: '', button: '' });
+  const [shortcuts] = useState(defaultShortcuts);
 
-  const handleEdit = (idx: number) => {
-    setEditing(idx);
-    setNewShortcut(shortcuts[idx]);
-  };
-  const handleSave = (idx: number) => {
-    const updated = [...shortcuts];
-    updated[idx] = { ...newShortcut, button: newShortcut.button || newShortcut.action, disabled: false };
-    setShortcuts(updated);
-    setEditing(null);
-    setNewShortcut({ key: '', action: '', button: '' });
-  };
-  const handleDisable = (idx: number) => {
-    setShortcuts(shortcuts.map((s, i) => i === idx ? { ...s, disabled: true } : s));
-  };
-  const handleEnable = (idx: number) => {
-    setShortcuts(shortcuts.map((s, i) => i === idx ? { ...s, disabled: false } : s));
-  };
-  const handleAdd = () => {
-    if (!newShortcut.key || !newShortcut.action) return;
-    setShortcuts([...shortcuts, { ...newShortcut, button: newShortcut.button || newShortcut.action, disabled: false }]);
-    setNewShortcut({ key: '', action: '', button: '' });
-  };
-
-  const [returnsOpen, setReturnsOpen] = useState(false);
   return (
     <div className="max-w-2xl mx-auto">
-      <ReturnsPopup open={returnsOpen} onClose={() => setReturnsOpen(false)} />
+      <ReturnsPopup open={false} onClose={() => {}} />
       <div className="bg-card border border-border rounded-2xl shadow-lg p-6">
         <div className="flex items-center gap-2 mb-4">
           <Zap className="w-6 h-6 text-accent" />
@@ -121,7 +85,9 @@ const POSSettingsTab: React.FC = () => {
                 (s.disabled ? 'opacity-40 pointer-events-none' : '')
               }
               onClick={() => {
-                if (s.action === 'Open Returns') setReturnsOpen(true);
+                if (s.action === 'Open Returns') {
+                  // The ReturnsPopup component handles its own state and logic
+                }
                 // يمكنك إضافة منطق آخر لكل اختصار هنا
               }}
               title={s.key}
@@ -134,7 +100,7 @@ const POSSettingsTab: React.FC = () => {
               <button
                 className="mt-3 text-xs bg-accent text-white px-3 py-1 rounded hover:bg-accent-hover transition-colors flex items-center gap-1"
                 type="button"
-                onClick={e => { e.stopPropagation(); handleEdit(idx); }}
+                onClick={e => { e.stopPropagation(); }}
               >
                 <Edit className="w-4 h-4" /> Edit
               </button>

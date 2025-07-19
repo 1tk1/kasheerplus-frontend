@@ -44,9 +44,6 @@ const UsersSettingsTab: React.FC = () => {
       setDeleteIdx(null);
     }
   };
-  const handleRoleChange = (idx: number, newRole: string) => {
-    setUsers(users.map((u, i) => (i === idx ? { ...u, role: newRole } : u)));
-  };
 
   return (
     <div className="space-y-6">

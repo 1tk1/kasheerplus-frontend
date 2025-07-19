@@ -51,10 +51,6 @@ const Invoices: React.FC = () => {
       setShowEditModal(false)
     }
   }
-  const confirmDeleteInvoice = (idx: number) => {
-    setDeleteIndex(idx)
-    setShowDeleteModal(true)
-  }
   const handleConfirmDelete = () => {
     if (deleteIndex !== null) {
       setInvoices(prev => prev.filter((_, i) => i !== deleteIndex))
