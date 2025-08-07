@@ -1,24 +1,19 @@
-// Mock Supabase client for frontend-only development
-export const supabase = {
-  auth: {
-    getSession: () => Promise.resolve({ data: { session: null } }),
-    signInWithPassword: () => Promise.resolve({ error: null }),
-    signUp: () => Promise.resolve({ error: null }),
-    signOut: () => Promise.resolve({ error: null }),
-    resetPasswordForEmail: () => Promise.resolve({ error: null }),
-    refreshSession: () => Promise.resolve({ data: { session: null }, error: null }),
-    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
-  },
-  from: () => ({
-    select: () => ({
-      eq: () => ({
-        single: () => Promise.resolve({ data: null, error: null })
-      })
-    }),
-    update: () => ({
-      eq: () => Promise.resolve({ error: null })
-    })
-  })
+import { createClient } from '@supabase/supabase-js'
+import { Database } from './types'
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables')
 }
 
-export default supabase 
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+})
+
+export default supabase

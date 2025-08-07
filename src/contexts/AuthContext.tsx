@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase/supabaseClient'
+import type { User, Session } from '@supabase/supabase-js'
+import type { Database } from '@/lib/supabase/types'
 
-export type UserRole = 'admin' | 'store_owner' | 'general_manager' | 'accountant' | 'cashier' | 'super_admin'
+export type UserRole = Database['public']['Enums']['user_role']
 
 export interface AuthUser {
   id: string
@@ -9,17 +12,24 @@ export interface AuthUser {
   store_id?: string
   name?: string
   avatar_url?: string
+  phone?: string
   email_verified?: boolean
+  is_active?: boolean
   created_at: string
   updated_at: string
 }
 
 interface AuthContextType {
   user: AuthUser | null
-  session: any | null
+  session: Session | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: any }>
-  signUp: (email: string, password: string, userData: Partial<AuthUser>) => Promise<{ error: any }>
+  signUp: (email: string, password: string, userData: {
+    name: string
+    role?: UserRole
+    store_name?: string
+    phone?: string
+  }) => Promise<{ error: any }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<{ error: any }>
   updateProfile: (updates: Partial<AuthUser>) => Promise<{ error: any }>
@@ -40,63 +50,126 @@ interface AuthProviderProps {
   children: React.ReactNode
 }
 
-// Mock user data for demo
-const mockUser: AuthUser = {
-  id: '1',
-  email: 'admin@kasheerplus.com',
-  role: 'admin',
-  store_id: 'store-1',
-  name: 'Admin User',
-  avatar_url: '',
-  email_verified: true,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString()
-}
-
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null)
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 1000)
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      if (session?.user) {
+        fetchUserProfile(session.user)
+      } else {
+        setLoading(false)
+      }
+    })
 
-    return () => clearTimeout(timer)
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session)
+      
+      if (session?.user) {
+        await fetchUserProfile(session.user)
+      } else {
+        setUser(null)
+        setLoading(false)
+      }
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
+
+  const fetchUserProfile = async (authUser: User) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('user_profiles')
+        .select(`
+          *,
+          stores (
+            id,
+            name
+          )
+        `)
+        .eq('id', authUser.id)
+        .single()
+
+      if (error) {
+        console.error('Error fetching user profile:', error)
+        setLoading(false)
+        return
+      }
+
+      if (profile) {
+        setUser({
+          id: profile.id,
+          email: authUser.email!,
+          role: profile.role,
+          store_id: profile.store_id,
+          name: profile.name,
+          avatar_url: profile.avatar_url,
+          phone: profile.phone,
+          email_verified: authUser.email_confirmed_at ? true : false,
+          is_active: profile.is_active,
+          created_at: profile.created_at,
+          updated_at: profile.updated_at
+        })
+      }
+    } catch (error) {
+      console.error('Error in fetchUserProfile:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const signIn = async (email: string, password: string) => {
     try {
-      // Mock authentication
-      if (email && password) {
-        setUser(mockUser)
-        setSession({ user: mockUser })
-        return { error: null }
-      } else {
-        return { error: { message: 'Invalid credentials' } }
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        return { error }
       }
+
+      return { error: null }
     } catch (error) {
       return { error }
     }
   }
 
-  const signUp = async (email: string, _password: string, userData: Partial<AuthUser>) => {
+  const signUp = async (
+    email: string, 
+    password: string, 
+    userData: {
+      name: string
+      role?: UserRole
+      store_name?: string
+      phone?: string
+    }
+  ) => {
     try {
-      // Mock registration
-      const newUser: AuthUser = {
-        id: Date.now().toString(),
+      const { error } = await supabase.auth.signUp({
         email,
-        role: userData.role || 'cashier',
-        name: userData.name || '',
-        avatar_url: '',
-        email_verified: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        password,
+        options: {
+          data: {
+            name: userData.name,
+            role: userData.role || 'admin',
+            store_name: userData.store_name || 'My Store',
+            phone: userData.phone
+          }
+        }
+      })
+
+      if (error) {
+        return { error }
       }
-      setUser(newUser)
-      setSession({ user: newUser })
+
       return { error: null }
     } catch (error) {
       return { error }
@@ -105,17 +178,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = async () => {
     try {
-      setUser(null)
-      setSession(null)
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Error signing out:', error)
+      }
     } catch (error) {
       console.error('Error signing out:', error)
     }
   }
 
-  const resetPassword = async (_email: string) => {
+  const resetPassword = async (email: string) => {
     try {
-      // Mock password reset
-      return { error: null }
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      })
+
+      return { error }
     } catch (error) {
       return { error }
     }
@@ -125,6 +203,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!user) return { error: new Error('No user logged in') }
 
     try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({
+          name: updates.name,
+          phone: updates.phone,
+          avatar_url: updates.avatar_url,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id)
+
+      if (error) {
+        return { error }
+      }
+
+      // Update local user state
       setUser(prev => prev ? { ...prev, ...updates } : null)
       return { error: null }
     } catch (error) {
@@ -134,9 +227,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const refreshSession = async () => {
     try {
-      // Mock session refresh
-      if (user) {
-        setSession({ user })
+      const { data: { session }, error } = await supabase.auth.refreshSession()
+      if (error) {
+        console.error('Error refreshing session:', error)
+      } else if (session?.user) {
+        await fetchUserProfile(session.user)
       }
     } catch (error) {
       console.error('Error refreshing session:', error)
@@ -160,4 +255,4 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       {children}
     </AuthContext.Provider>
   )
-} 
+}

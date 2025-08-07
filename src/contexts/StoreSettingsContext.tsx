@@ -1,22 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useAuth } from './AuthContext'
+import { supabase } from '@/lib/supabase/supabaseClient'
+import type { Database } from '@/lib/supabase/types'
 
-export interface StoreSettings {
-  id: string
-  name: string
-  address?: string
-  phone?: string
-  email?: string
-  currency: string
-  timezone: string
-  logo_url?: string
-  theme: 'light' | 'dark' | 'auto'
-  language: string
-  tax_rate: number
-  receipt_template: string
-  created_at: string
-  updated_at: string
-}
+export type StoreSettings = Database['public']['Tables']['stores']['Row']
 
 interface StoreSettingsContextType {
   settings: StoreSettings | null
@@ -39,50 +26,59 @@ interface StoreSettingsProviderProps {
   children: React.ReactNode
 }
 
-// Mock store settings
-const mockSettings: StoreSettings = {
-  id: 'store-1',
-  name: 'KasheerPlus Store',
-  address: '123 Main Street, City, Country',
-  phone: '+1 (555) 123-4567',
-  email: 'store@kasheerplus.com',
-  currency: 'USD',
-  timezone: 'UTC',
-  logo_url: '',
-  theme: 'auto',
-  language: 'en',
-  tax_rate: 10,
-  receipt_template: 'default',
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString()
-}
-
 export const StoreSettingsProvider: React.FC<StoreSettingsProviderProps> = ({ children }) => {
   const { user } = useAuth()
   const [settings, setSettings] = useState<StoreSettings | null>(null)
   const [loading, setLoading] = useState(true)
 
   const fetchSettings = async () => {
-    // Simulate API call
-    setTimeout(() => {
-      setSettings(mockSettings)
+    if (!user?.store_id) {
       setLoading(false)
-    }, 500)
+      return
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('stores')
+        .select('*')
+        .eq('id', user.store_id)
+        .single()
+
+      if (error) {
+        console.error('Error fetching store settings:', error)
+      } else {
+        setSettings(data)
+      }
+    } catch (error) {
+      console.error('Error in fetchSettings:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    if (user?.store_id) {
-      fetchSettings()
-    } else {
-      setLoading(false)
-    }
+    fetchSettings()
   }, [user?.store_id])
 
   const updateSettings = async (updates: Partial<StoreSettings>) => {
     if (!user?.store_id) return { error: new Error('No store selected') }
 
     try {
-      setSettings(prev => prev ? { ...prev, ...updates } : null)
+      const { data, error } = await supabase
+        .from('stores')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.store_id)
+        .select()
+        .single()
+
+      if (error) {
+        return { error }
+      }
+
+      setSettings(data)
       return { error: null }
     } catch (error) {
       return { error }
@@ -105,4 +101,4 @@ export const StoreSettingsProvider: React.FC<StoreSettingsProviderProps> = ({ ch
       {children}
     </StoreSettingsContext.Provider>
   )
-} 
+}
